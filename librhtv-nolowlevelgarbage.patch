@@ -1,0 +1,118 @@
+--- tvision/classes/linux/tscreen.cc.orig	Tue Oct  9 19:05:53 2001
++++ tvision/classes/linux/tscreen.cc	Fri Aug  9 00:31:28 2002
+@@ -22,13 +22,6 @@
+ // some problems when compiling for Alpha (__alpha__).
+ //   Also make it only for Linux until I know how to do it for FreeBSD.
+ 
+-#if defined(TVCPU_x86) && defined(TVOSf_Linux)
+- // Needed for ioperm, used only by i386.
+- // I also noted that glibc 2.1.3 for Alpha, SPARC and PPC doesn't have
+- // this header
+- #include <sys/perm.h>
+- #define h386LowLevel
+-#endif
+ 
+ // I don't know why it's needed, but it seems to be only known to me way
+ // to get rhgdb built so it doesn't mess up terminal settings.
+@@ -687,23 +680,6 @@
+ void ScreenUpdate();
+ extern ushort user_mode;
+ 
+-#ifdef h386LowLevel
+-#include <asm/io.h>
+-
+-static inline
+-unsigned char I(unsigned char i)
+-{
+-  outb(i,0x3b4);
+-  return inb(0x3b5);
+-}
+-
+-static inline
+-void O(unsigned char i,unsigned char b)
+-{
+-  outb(i,0x3b4);
+-  outb(b,0x3b5);
+-}
+-#endif
+ 
+ void TScreen::GetCursor(int &x,int &y)
+ {
+@@ -718,15 +694,6 @@
+ 
+ void TScreen::SetCursor(int x,int y)
+ {
+- #ifdef h386LowLevel
+-  if (dual_display || screenMode == 7)
+-  {
+-    unsigned short loc = y*80+x;
+-    O(0x0e,loc >> 8);
+-    O(0x0f,loc & 0xff);
+-  }
+-  else
+- #endif
+   {
+     TDisplay::SetCursor(x,y);
+   }
+@@ -864,23 +831,6 @@
+   if (canOnlyWriteVCS)
+      TDisplay::SetCursor(0,0);
+ 
+-  #ifdef h386LowLevel
+-  port_access = !ioperm(0x3b4, 7, 1);
+-  if (port_access)
+-  {
+-    unsigned char is_mda = (inb(0x3ba) & 0x70) >> 4;
+-    is_mda = (is_mda == 0) || (is_mda == 1) || (is_mda == 5);
+-    if (is_mda)
+-    {
+-      mono_mem_desc = open("/dev/mem",O_RDWR);
+-      if (mono_mem_desc != -1)
+-      {
+-        mono_mem = (unsigned short *)mmap(NULL,80*25*2,PROT_READ|PROT_WRITE,
+-                   MAP_SHARED,mono_mem_desc,0xB0000);
+-      }
+-    }
+-  }
+-  #endif
+ 
+   
+   /* Don't need special rights anymore */
+@@ -1075,37 +1025,11 @@
+ 
+ void TScreen::setCursorType(ushort ct)
+ {
+- #ifdef h386LowLevel
+-  if (dual_display || screenMode == 7)
+-  {
+-    if (ct == 0x2000) // cursor off
+-    {
+-      O(0x0a,0x01);
+-      O(0x0b,0x00);
+-    }
+-    else
+-    {
+-      O(0x0a,ct >> 8);
+-      O(0x0b,ct & 0xff);
+-    }
+-  }
+-  else
+- #endif
+     TDisplay::setCursorType(ct);
+ }
+ 
+ ushort TScreen::getCursorType()
+ {
+- #ifdef h386LowLevel
+-  if (dual_display || screenMode == 7)
+-  {
+-    unsigned short ct;
+-    ct = (I(0x0a) << 8) | I(0x0b);
+-    if (!ct) ct = 0x2000;
+-    return ct;
+-  }
+-  else
+- #endif
+     return TDisplay::getCursorType();
+ }
+ 

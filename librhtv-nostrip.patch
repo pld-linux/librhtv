@@ -1,0 +1,10 @@
+--- tvision/config.pl.orig	Thu Jan  3 02:14:30 2002
++++ tvision/config.pl	Fri Aug  9 00:24:48 2002
+@@ -657,7 +657,6 @@
+     # Not needed if the soname changes which each version (at least Ivan says that)
+     #$rep.="\tcd \$(libdir); ln -s librhtv.so.$Version librhtv.so.1\n";
+     $rep.="\tinstall -m 0644 linuxso/librhtv.so.$Version \$(libdir)\n";
+-    $rep.="\tstrip --strip-debug \$(libdir)/librhtv.so.$Version\n";
+     $rep.="\t-ldconfig\n";
+    }
+  $text=~s/\@install2_rule\@/$rep/g;
