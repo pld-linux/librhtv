@@ -1,0 +1,141 @@
+Summary:	Unix port of Borland TurboVision library
+Summary(pl):	Uniksowa wersja biblioteki TurboVision Borlanda
+Name:		librhtv
+Version:	1.1.4
+Release:	1
+License:	Borland, some modifications are BSD-style licensed (generally free)
+Group:		Libraries
+Group(de):	Libraries
+Group(es):	Bibliotecas
+Group(fr):	Librairies
+Group(pl):	Biblioteki
+Group(pt_BR):	Bibliotecas
+Group(ru):	Библиотеки
+Group(uk):	Б╕бл╕отеки
+Source0:	http://prdownloads.sourceforge.net/setedit/rhtvision-%{version}.src.tar.gz
+BuildRequires:	gcc-c++
+BuildRequires:	gpm-devel
+BuildRequires:	ncurses-devel
+BuildRequires:	perl
+BuildRequires:	XFree86-devel
+BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+
+%description
+Turbo Vision (or TV, for short) is a library that provides an
+application framework. With TV you can write a beautiful
+object-oriented character-mode user interface in a short time.
+
+TV is available in C++ and Pascal and is a product of Borland
+International. It was developed to run on MS-DOS systems, but today it
+is available for many other platforms (ported by independent
+programmers).
+
+This port is based on the Borland 2.0 version with fixes.
+
+%description -l pl
+Uniksowa wersja biblioteki TurboVision 2.0 Borlanda. TurboVision jest
+obiektow╠ bibliotek╠ do okienkowych interfejsСw u©ytkownika w trybie
+tekstowym.
+
+%package devel
+Summary:	%{name} header files
+Summary(pl):	Pliki nagЁСwkowe %{name}
+Group:		Development/Libraries
+Group(de):	Entwicklung/Libraries
+Group(es):	Desarrollo/Bibliotecas
+Group(fr):	Development/Librairies
+Group(pl):	Programowanie/Biblioteki
+Group(pt_BR):	Desenvolvimento/Bibliotecas
+Group(ru):	Разработка/Библиотеки
+Group(uk):	Розробка/Б╕бл╕отеки
+Requires:	%{name} = %{version}
+
+%description devel
+rhtvision header files.
+
+%description devel -l pl
+Pliki nagЁСwkowe rhtvision.
+
+%package static
+Summary:	Static %{name} libraries
+Summary(pl):	Biblioteki statyczne %{name}
+Group:		Development/Libraries
+Group(de):	Entwicklung/Libraries
+Group(es):	Desarrollo/Bibliotecas
+Group(fr):	Development/Librairies
+Group(pl):	Programowanie/Biblioteki
+Group(pt_BR):	Desenvolvimento/Bibliotecas
+Group(ru):	Разработка/Библиотеки
+Group(uk):	Розробка/Б╕бл╕отеки
+Requires:	%{name}-devel = %{version}
+
+%description static
+Static rhtvision libraries.
+
+%description static -l pl
+Biblioteki statyczne rhtvision.
+
+%prep
+%setup -q -n tvision
+
+%build
+./configure --prefix=%{_prefix} \
+	--cflags="-I%{_includedir}/ncurses"
+
+sed 's|<sys/time.h>|<time.h>|' examples/demo/puzzle.cc > examples/demo/puzzle.cc.tmp
+mv -f examples/demo/puzzle.cc.tmp examples/demo/puzzle.cc
+
+%{__make} \
+	CFLAGS="%{rpmcflags}" \
+	CXXFLAGS="%{rpmcflags} -fno-exceptions -fno-implicit-templates"
+
+%install
+rm -rf $RPM_BUILD_ROOT
+install -d $RPM_BUILD_ROOT%{_examplesdir}/%{name}
+
+%{__make} install \
+	prefix=$RPM_BUILD_ROOT%{_prefix}
+
+# let's create new rhide.env 
+cat > examples/rhide.env  <<EOF
+RHIDE_GCC=gcc
+RHIDE_GXX=gcc
+RHIDE_LD=gcc
+RHIDE_AR=ar
+RHIDE_OS_CFLAGS=-I%{_includedir}/ncurses
+RHIDE_OS_CXXFLAGS=-I%{_includedir}/ncurses
+
+TVSRC=%{_includedir}/rhtvision
+RHIDE_OS_LIBS=
+TVOBJ=
+EOF
+
+cd examples
+perl patchenv.pl
+cd ..
+
+cp -ar examples/* $RPM_BUILD_ROOT%{_examplesdir}/%{name}
+
+gzip -9nf readme.txt TODO borland.txt
+
+%clean
+rm -rf $RPM_BUILD_ROOT
+
+%post	-p /sbin/ldconfig
+%postun	-p /sbin/ldconfig
+
+%files
+%defattr(644,root,root,755)
+%doc *.gz
+%attr(755,root,root) %{_libdir}/lib*.so.*.*
+
+%files devel
+%defattr(644,root,root,755)
+%{_includedir}/*
+%attr(755,root,root) %{_libdir}/lib*.so
+%dir %{_examplesdir}/%{name}
+%{_examplesdir}/%{name}/*
+
+%files static
+%defattr(644,root,root,755)
+%attr(644,root,root) %{_libdir}/lib*.a
