@@ -3,7 +3,7 @@ Summary(pl):	Uniksowa wersja biblioteki TurboVision Borlanda
 Name:		librhtv
 Version:	1.1.4
 Release:	1
-License:	Borland, some modifications are BSD-style licensed (generally free)
+License:	Borland, some modifications are BSD-like licensed (generally free)
 Group:		Libraries
 Source0:	http://prdownloads.sourceforge.net/setedit/rhtvision-%{version}.src.tar.gz
 BuildRequires:	gcc-c++
