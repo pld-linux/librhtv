@@ -5,13 +5,6 @@ Version:	1.1.4
 Release:	1
 License:	Borland, some modifications are BSD-style licensed (generally free)
 Group:		Libraries
-Group(de):	Libraries
-Group(es):	Bibliotecas
-Group(fr):	Librairies
-Group(pl):	Biblioteki
-Group(pt_BR):	Bibliotecas
-Group(ru):	Библиотеки
-Group(uk):	Б╕бл╕отеки
 Source0:	http://prdownloads.sourceforge.net/setedit/rhtvision-%{version}.src.tar.gz
 BuildRequires:	gcc-c++
 BuildRequires:	gpm-devel
@@ -41,13 +34,6 @@ tekstowym.
 Summary:	%{name} header files
 Summary(pl):	Pliki nagЁСwkowe %{name}
 Group:		Development/Libraries
-Group(de):	Entwicklung/Libraries
-Group(es):	Desarrollo/Bibliotecas
-Group(fr):	Development/Librairies
-Group(pl):	Programowanie/Biblioteki
-Group(pt_BR):	Desenvolvimento/Bibliotecas
-Group(ru):	Разработка/Библиотеки
-Group(uk):	Розробка/Б╕бл╕отеки
 Requires:	%{name} = %{version}
 
 %description devel
@@ -60,13 +46,6 @@ Pliki nagЁСwkowe rhtvision.
 Summary:	Static %{name} libraries
 Summary(pl):	Biblioteki statyczne %{name}
 Group:		Development/Libraries
-Group(de):	Entwicklung/Libraries
-Group(es):	Desarrollo/Bibliotecas
-Group(fr):	Development/Librairies
-Group(pl):	Programowanie/Biblioteki
-Group(pt_BR):	Desenvolvimento/Bibliotecas
-Group(ru):	Разработка/Библиотеки
-Group(uk):	Розробка/Б╕бл╕отеки
 Requires:	%{name}-devel = %{version}
 
 %description static
