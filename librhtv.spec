@@ -72,7 +72,8 @@ mv -f examples/demo/puzzle.cc.tmp examples/demo/puzzle.cc
 
 %{__make} \
 	CFLAGS="%{rpmcflags}" \
-	CXXFLAGS="%{rpmcflags} -fno-exceptions -fno-implicit-templates"
+	CXXFLAGS="%{rpmcflags} -fno-exceptions" \
+	RHIDE_GCC=%{__cc} RHIDE_GXX=%{__cxx}
 
 %install
 rm -rf $RPM_BUILD_ROOT
