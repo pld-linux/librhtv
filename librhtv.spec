@@ -75,7 +75,7 @@ install -d $RPM_BUILD_ROOT%{_examplesdir}/%{name}
 %{__make} install \
 	prefix=$RPM_BUILD_ROOT%{_prefix}
 
-# let's create new rhide.env 
+# let's create new rhide.env
 cat > examples/rhide.env  <<EOF
 RHIDE_GCC=gcc
 RHIDE_GXX=gcc
