@@ -2,12 +2,14 @@ Summary:	Unix port of Borland TurboVision library
 Summary(pl):	Uniksowa wersja biblioteki TurboVision Borlanda
 Name:		librhtv
 Version:	2.0.2
-Release:	2
+Release:	3
 License:	Borland, some modifications are BSD-like licensed (generally free)
 Group:		Libraries
 Source0:	http://dl.sourceforge.net/tvision/rhtvision-%{version}.src.tar.gz
 # Source0-md5:	4071b59f9846f4f4d0111417caaa9c2b
 Patch0:		%{name}-nolowlevelgarbage.patch
+Patch1:		%{name}-input1line.patch
+Patch2:		%{name}-gcc34.patch
 URL:		http://tvision.sourceforge.net/
 BuildRequires:	XFree86-devel
 BuildRequires:	gpm-devel
@@ -60,6 +62,8 @@ Biblioteki statyczne rhtvision.
 %prep
 %setup -q -n tvision
 %patch0 -p1
+%patch1 -p1
+%patch2 -p1
 
 %build
 %{__perl} config.pl \
