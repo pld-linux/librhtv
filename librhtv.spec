@@ -5,7 +5,7 @@ Version:	1.1.4
 Release:	2
 License:	Borland, some modifications are BSD-like licensed (generally free)
 Group:		Libraries
-Source0:	http://prdownloads.sourceforge.net/setedit/rhtvision-%{version}.src.tar.gz
+Source0:	http://dl.sourceforge.net/setedit/rhtvision-%{version}.src.tar.gz
 Patch0:		%{name}-nostrip.patch
 Patch1:		%{name}-nolowlevelgarbage.patch
 Patch2:		%{name}-gcc32.patch
