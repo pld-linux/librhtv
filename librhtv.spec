@@ -37,7 +37,7 @@ tekstowym.
 Summary:	%{name} header files
 Summary(pl):	Pliki nag³ówkowe %{name}
 Group:		Development/Libraries
-Requires:	%{name} = %{version}
+Requires:	%{name} = %{version}-%{release}
 
 %description devel
 rhtvision header files.
@@ -49,7 +49,7 @@ Pliki nag³ówkowe rhtvision.
 Summary:	Static %{name} libraries
 Summary(pl):	Biblioteki statyczne %{name}
 Group:		Development/Libraries
-Requires:	%{name}-devel = %{version}
+Requires:	%{name}-devel = %{version}-%{release}
 
 %description static
 Static rhtvision libraries.
