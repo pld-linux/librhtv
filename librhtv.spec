@@ -1,15 +1,15 @@
+%define		snap	20040910
 Summary:	Unix port of Borland TurboVision library
 Summary(pl):	Uniksowa wersja biblioteki TurboVision Borlanda
 Name:		librhtv
-Version:	2.0.2
-Release:	3
+Version:	2.0.3
+Release:	0.%{snap}.1
 License:	Borland, some modifications are BSD-like licensed (generally free)
 Group:		Libraries
-Source0:	http://dl.sourceforge.net/tvision/rhtvision-%{version}.src.tar.gz
-# Source0-md5:	4071b59f9846f4f4d0111417caaa9c2b
+# it's really snapshot version, waiting for final release...
+Source0:	http://tvision.sourceforge.net/rhtvision-%{version}.src.tar.gz
+# Source0-md5:	ff3d0cf14892da91555c73a029c770af
 Patch0:		%{name}-nolowlevelgarbage.patch
-Patch1:		%{name}-input1line.patch
-Patch2:		%{name}-gcc34.patch
 URL:		http://tvision.sourceforge.net/
 BuildRequires:	XFree86-devel
 BuildRequires:	gpm-devel
@@ -62,8 +62,6 @@ Biblioteki statyczne rhtvision.
 %prep
 %setup -q -n tvision
 %patch0 -p1
-%patch1 -p1
-%patch2 -p1
 
 %build
 %{__perl} config.pl \
@@ -108,7 +106,7 @@ cd ..
 
 cp -ar examples/* $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
 
-%find_lang tvision
+%find_lang tvision%{version}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -116,7 +114,7 @@ rm -rf $RPM_BUILD_ROOT
 %post	-p /sbin/ldconfig
 %postun	-p /sbin/ldconfig
 
-%files -f tvision.lang
+%files -f tvision%{version}.lang
 %defattr(644,root,root,755)
 %doc readme.txt TODO borland.txt
 %attr(755,root,root) %{_libdir}/lib*.so.*.*
