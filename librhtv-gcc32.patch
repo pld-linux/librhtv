@@ -1,19 +1,24 @@
 --- tvision/include/compatlayer.h.orig	Thu Jan  3 02:09:10 2002
 +++ tvision/include/compatlayer.h	Wed Oct 16 00:35:29 2002
-@@ -231,7 +231,7 @@
+@@ -231,7 +231,11 @@
    #define CLY_StreamOffT     std::streamoff
    #define CLY_IOSSeekDir     std::ios::seekdir
    #define CLY_FBOpenProtDef  0
--  #define CLY_NewFBFromFD(f) new filebuf(fdopen(f,"rb+"),ios::in|ios::out|ios::binary)
++  #if (__GNUC__ > 3) || (__GNUC_MINOR__ >= 1)
 +  #define CLY_NewFBFromFD(f) new __gnu_cxx::stdio_filebuf<char>(fdopen(f,"rb+"),ios::in|ios::out|ios::binary)
++  #else
+   #define CLY_NewFBFromFD(f) new filebuf(fdopen(f,"rb+"),ios::in|ios::out|ios::binary)
++  #endif
    #define CLY_PubSetBuf(a,b) pubsetbuf(a,b)
    #define CLY_FBOpen(a,b,c)  open(a,b)
    #define CLY_IOSBin         std::ios::binary
-@@ -1380,6 +1380,7 @@
+@@ -1380,6 +1384,9 @@
  #if defined(Uses_iostream) && !defined(Included_iostream)
   #define Included_iostream 1
   #include IOSTREAM_HEADER
++ #if (__GNUC__ > 3) || (__GNUC_MINOR__ >= 1)
 + #include <ext/stdio_filebuf.h>
++ #endif
  #endif
  
  #if defined(Uses_CLYFileAttrs) && !defined(Uses_CLYFileAttrsDef)
