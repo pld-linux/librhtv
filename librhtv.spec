@@ -59,7 +59,7 @@ Biblioteki statyczne rhtvision.
 
 %build
 ./configure --prefix=%{_prefix} \
-	--cflags="-I%{_includedir}/ncurses"
+	--cflags="-I/usr/include/ncurses"
 
 sed 's|<sys/time.h>|<time.h>|' examples/demo/puzzle.cc > examples/demo/puzzle.cc.tmp
 mv -f examples/demo/puzzle.cc.tmp examples/demo/puzzle.cc
@@ -95,8 +95,6 @@ cd ..
 
 cp -ar examples/* $RPM_BUILD_ROOT%{_examplesdir}/%{name}
 
-gzip -9nf readme.txt TODO borland.txt
-
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -105,7 +103,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc *.gz
+%doc readme.txt TODO borland.txt
 %attr(755,root,root) %{_libdir}/lib*.so.*.*
 
 %files devel
