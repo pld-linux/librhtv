@@ -1,0 +1,47 @@
+--- tvision/include/compatlayer.h.orig	Thu Jan  3 02:09:10 2002
++++ tvision/include/compatlayer.h	Wed Oct 16 00:35:29 2002
+@@ -231,7 +231,7 @@
+   #define CLY_StreamOffT     std::streamoff
+   #define CLY_IOSSeekDir     std::ios::seekdir
+   #define CLY_FBOpenProtDef  0
+-  #define CLY_NewFBFromFD(f) new filebuf(fdopen(f,"rb+"),ios::in|ios::out|ios::binary)
++  #define CLY_NewFBFromFD(f) new __gnu_cxx::stdio_filebuf<char>(fdopen(f,"rb+"),ios::in|ios::out|ios::binary)
+   #define CLY_PubSetBuf(a,b) pubsetbuf(a,b)
+   #define CLY_FBOpen(a,b,c)  open(a,b)
+   #define CLY_IOSBin         std::ios::binary
+@@ -1380,6 +1380,7 @@
+ #if defined(Uses_iostream) && !defined(Included_iostream)
+  #define Included_iostream 1
+  #include IOSTREAM_HEADER
++ #include <ext/stdio_filebuf.h>
+ #endif
+ 
+ #if defined(Uses_CLYFileAttrs) && !defined(Uses_CLYFileAttrsDef)
+--- tvision/include/tv/intl.h.orig	Wed Jan  2 00:40:55 2002
++++ tvision/include/tv/intl.h	Wed Oct 16 00:24:44 2002
+@@ -9,24 +9,7 @@
+ 
+ #ifdef HAVE_INTL_SUPPORT
+ 
+-#ifdef __DJGPP__
+- // Avoid collisions with conio
+- #undef gettext
+-#endif
+-#ifdef __cplusplus
+-extern "C" {
+-#endif
+-// We know the prototypes and it helps with the dummy
+-char *textdomain(const char *domainname);
+-char *bindtextdomain(const char *domainname, const char *dirname);
+-#ifndef __DJGPP__
+-char *gettext(const char *msgid);
+-#endif
+-char *gettext__(const char *msgid);
+-#ifdef __cplusplus
+-}
+-#endif
+-//#include <libintl.h>
++#include <libintl.h>
+ 
+ // Must use __DJGPP__ here
+ #ifndef __DJGPP__

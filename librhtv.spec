@@ -8,11 +8,12 @@ Group:		Libraries
 Source0:	http://prdownloads.sourceforge.net/setedit/rhtvision-%{version}.src.tar.gz
 Patch0:		%{name}-nostrip.patch
 Patch1:		%{name}-nolowlevelgarbage.patch
-BuildRequires:	gcc-c++
+Patch2:		%{name}-gcc32.patch
+BuildRequires:	XFree86-devel
 BuildRequires:	gpm-devel
+BuildRequires:	libstdc++-devel
 BuildRequires:	ncurses-devel
 BuildRequires:	perl
-BuildRequires:	XFree86-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -60,6 +61,7 @@ Biblioteki statyczne rhtvision.
 %setup -q -n tvision
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 %build
 ./configure --prefix=%{_prefix} \
@@ -82,7 +84,7 @@ install -d $RPM_BUILD_ROOT%{_examplesdir}/%{name}
 # let's create new rhide.env
 cat > examples/rhide.env  <<EOF
 RHIDE_GCC=gcc
-RHIDE_GXX=gcc
+RHIDE_GXX=g++
 RHIDE_LD=gcc
 RHIDE_AR=ar
 RHIDE_OS_CFLAGS=-I%{_includedir}/ncurses
