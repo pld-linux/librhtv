@@ -1,0 +1,114 @@
+diff -Nur tvision.orig/classes/fpbase.cc tvision.chng/classes/fpbase.cc
+--- tvision.orig/classes/fpbase.cc	2003-05-29 20:25:25.000000000 +0200
++++ tvision.chng/classes/fpbase.cc	2004-06-15 15:26:28.000000000 +0200
+@@ -108,7 +108,7 @@
+        _M_mode=mode;
+        
+        // For time being, set both (in/out) sets  of pointers.
+-       _M_set_indeterminate();
++//       _M_set_indeterminate();
+        if ((mode & ios_base::ate) &&
+            this->seekoff(0,ios_base::end,mode)<0)
+           this->close();
+@@ -123,14 +123,14 @@
+  CLY_int_filebuf *ret=NULL;
+  if (!this->is_open())
+    {
+-    _M_file.sys_open(h,mode,false);
++    _M_file.sys_open(h,mode);
+     if (this->is_open())
+       {
+        _M_allocate_internal_buffer();
+        _M_mode=mode;
+        
+        // For time being, set both (in/out) sets  of pointers.
+-       _M_set_indeterminate();
++//       _M_set_indeterminate();
+        if ((mode & ios_base::ate) &&
+            this->seekoff(0,ios_base::end,mode)<0)
+           this->close();
+diff -Nur tvision.orig/classes/tmemo.cc tvision.chng/classes/tmemo.cc
+--- tvision.orig/classes/tmemo.cc	2001-09-29 04:11:46.000000000 +0200
++++ tvision.chng/classes/tmemo.cc	2004-06-15 14:27:53.000000000 +0200
+@@ -89,7 +89,7 @@
+         setBufLen( length );
+         }
+     else
+-        is.seekg( is.tellg() + long(length) );
++        is.seekg( is.tellg() + CLY_StreamPosT(length) );
+     return this;
+ }
+ 
+diff -Nur tvision.orig/classes/tresfile.cc tvision.chng/classes/tresfile.cc
+--- tvision.orig/classes/tresfile.cc	2003-05-29 20:25:25.000000000 +0200
++++ tvision.chng/classes/tresfile.cc	2004-06-15 14:33:35.000000000 +0200
+@@ -141,7 +141,7 @@
+     {
+         stream->seekg(basePos + indexPos, CLY_IOSBeg);
+         *stream << index;
+-        lenRez =  stream->tellp() - basePos -  long(sizeof(long) * 2);
++        lenRez =  long(stream->tellp()) - long(basePos) -  long(sizeof(long) * 2);
+         stream->seekg(basePos, CLY_IOSBeg);
+         *stream << rStreamMagic;
+         *stream << lenRez;
+@@ -184,7 +184,7 @@
+     p->pos =  indexPos;
+     stream->seekp(basePos + indexPos, CLY_IOSBeg);
+     *stream << item;
+-    indexPos = stream->tellp() - basePos;
++    indexPos = long(stream->tellp()) - basePos;
+     p->size  = indexPos - p->pos;
+     modified = True;
+ }
+diff -Nur tvision.orig/classes/tvedit1.cc tvision.chng/classes/tvedit1.cc
+--- tvision.orig/classes/tvedit1.cc	2003-04-22 16:47:20.000000000 +0200
++++ tvision.chng/classes/tvedit1.cc	2004-06-15 14:36:11.000000000 +0200
+@@ -98,7 +98,7 @@
+     if( TScreen::noUserScreen() )
+         return;
+     suspend();
+-    TScreen::System(CLY_GetShellName());
++    TScreen::System(CLY_GetShellName(), 0, -1, -1, -1);
+     resume();
+     redraw();
+ }
+diff -Nur tvision.orig/include/tv/screen.h tvision.chng/include/tv/screen.h
+--- tvision.orig/include/tv/screen.h	2003-02-17 13:45:43.000000000 +0100
++++ tvision.chng/include/tv/screen.h	2004-06-15 12:53:27.000000000 +0200
+@@ -121,7 +121,7 @@
+  // Returns 0 if the MSB of the background selects more colors.
+  static int    (*getBlinkState)();
+  // SET: A new and more rasonable way to choose a video mode
+- static int    (*setCrtModeRes)(unsigned w, unsigned h, int fW=-1, int fH=-1);
++ static int    (*setCrtModeRes)(unsigned w, unsigned h, int fW, int fH);
+  // SET: These are the real functions for *CursorType
+  static void   (*setCursorShape)(unsigned start, unsigned end);
+  static void   (*getCursorShape)(unsigned &start, unsigned &end);
+@@ -312,10 +312,10 @@
+  // SET: Used to set the video mode using an external program
+  static void   (*setVideoModeExt)(char *mode);
+  // SET: Set the video mode using sizes.
+- static int    (*setVideoModeRes)(unsigned w, unsigned h, int fW=-1, int fH=-1);
++ static int    (*setVideoModeRes)(unsigned w, unsigned h, int fW, int fH);
+  // SET: executes the indicated command
+- static int    (*System)(const char *command, pid_t *pidChild=0, int in=-1,
+-                         int out=-1, int err=-1);
++ static int    (*System)(const char *command, pid_t *pidChild, int in,
++                         int out, int err);
+  // Palette handling, they call the TDisplay members
+  static void     getPaletteColors(int from, int number, TScreenColor *colors);
+  static void     setPaletteColors(int from, int number, TScreenColor *colors);
+@@ -331,11 +331,11 @@
+  static int      setPrimaryFont(TScreenFont256 *font, int fontCP=-1, int appCP=-1)
+                    { return setFont(1,font,0,NULL,fontCP,appCP); };
+  static int      setSecondaryFont(TScreenFont256 *font)
+-                   { return setFont(0,NULL,1,font); };
++                   { return setFont(0,NULL,1,font,-1,-1); };
+  // That's the real function to set the fonts
+  static int    (*setFont)(int changeP, TScreenFont256 *fontP,
+                           int changeS, TScreenFont256 *fontS,
+-                          int fontCP=-1, int appCP=-1);
++                          int fontCP, int appCP);
+  static void   (*restoreFonts)();
+  static TVScreenFontRequestCallBack
+                  setFontRequestCallBack(TVScreenFontRequestCallBack cb);
