@@ -1,20 +1,19 @@
 Summary:	Unix port of Borland TurboVision library
 Summary(pl):	Uniksowa wersja biblioteki TurboVision Borlanda
 Name:		librhtv
-Version:	1.1.4
-Release:	2
+Version:	2.0.2
+Release:	1
 License:	Borland, some modifications are BSD-like licensed (generally free)
 Group:		Libraries
-Source0:	http://dl.sourceforge.net/setedit/rhtvision-%{version}.src.tar.gz
-# Source0-md5:	45f943202907b17aeed60b63be787c40
-Patch0:		%{name}-nostrip.patch
-Patch1:		%{name}-nolowlevelgarbage.patch
-Patch2:		%{name}-gcc32.patch
+Source0:	http://dl.sourceforge.net/tvision/rhtvision-%{version}.src.tar.gz
+# Source0-md5:	4071b59f9846f4f4d0111417caaa9c2b
+Patch0:		%{name}-nolowlevelgarbage.patch
+URL:		http://tvision.sourceforge.net/
 BuildRequires:	XFree86-devel
 BuildRequires:	gpm-devel
 BuildRequires:	libstdc++-devel
 BuildRequires:	ncurses-devel
-BuildRequires:	perl
+BuildRequires:	perl-base
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -61,24 +60,21 @@ Biblioteki statyczne rhtvision.
 %prep
 %setup -q -n tvision
 %patch0 -p1
-%patch1 -p1
-%patch2 -p1
 
 %build
-./configure --prefix=%{_prefix} \
-	--cflags="-I/usr/include/ncurses"
-
-sed 's|<sys/time.h>|<time.h>|' examples/demo/puzzle.cc > examples/demo/puzzle.cc.tmp
-mv -f examples/demo/puzzle.cc.tmp examples/demo/puzzle.cc
+%{__perl} config.pl \
+	--prefix=%{_prefix} \
+	--cflags="%{rpmcflags} -I/usr/include/ncurses" \
+	--cxxflags="%{rpmcflags} -fno-exceptions -I/usr/include/ncurses" \
+	%{?debug:--with-debug}
 
 %{__make} \
-	CFLAGS="%{rpmcflags}" \
-	CXXFLAGS="%{rpmcflags} -fno-exceptions" \
-	RHIDE_GCC=%{__cc} RHIDE_GXX=%{__cxx}
+	RHIDE_GCC=%{__cc} \
+	RHIDE_GXX=%{__cxx}
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT%{_examplesdir}/%{name}
+install -d $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
 
 %{__make} install \
 	prefix=$RPM_BUILD_ROOT%{_prefix}
@@ -89,19 +85,24 @@ RHIDE_GCC=gcc
 RHIDE_GXX=g++
 RHIDE_LD=gcc
 RHIDE_AR=ar
-RHIDE_OS_CFLAGS=-I%{_includedir}/ncurses
-RHIDE_OS_CXXFLAGS=-I%{_includedir}/ncurses
-
+RHIDE_ARFLAGS=rcs
+RHIDE_OS_CFLAGS=%{rpmcflags} -Wall
+RHIDE_OS_CXXFLAGS=%{rpmcflags} -Wall
+RHIDE_STDINC=/usr/include /usr/X11R6/include /usr/include/ncurses
 TVSRC=%{_includedir}/rhtvision
-RHIDE_OS_LIBS=
+RHIDE_OS_LIBS=stdc++
 TVOBJ=
+STDCPP_LIB=-lstdc++
+SHARED_CODE_OPTION=-fPIC
 EOF
 
 cd examples
-perl patchenv.pl
+%{__perl} patchenv.pl
 cd ..
 
-cp -ar examples/* $RPM_BUILD_ROOT%{_examplesdir}/%{name}
+cp -ar examples/* $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
+
+%find_lang tvision
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -109,17 +110,17 @@ rm -rf $RPM_BUILD_ROOT
 %post	-p /sbin/ldconfig
 %postun	-p /sbin/ldconfig
 
-%files
+%files -f tvision.lang
 %defattr(644,root,root,755)
 %doc readme.txt TODO borland.txt
 %attr(755,root,root) %{_libdir}/lib*.so.*.*
 
 %files devel
 %defattr(644,root,root,755)
-%{_includedir}/*
+%attr(755,root,root) %{_bindir}/rhtv-config
 %attr(755,root,root) %{_libdir}/lib*.so
-%dir %{_examplesdir}/%{name}
-%{_examplesdir}/%{name}/*
+%{_includedir}/*
+%{_examplesdir}/%{name}-%{version}
 
 %files static
 %defattr(644,root,root,755)
