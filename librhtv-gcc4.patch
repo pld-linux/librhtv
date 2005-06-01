@@ -1,0 +1,11 @@
+--- tvision.orig/include/compatlayer.h	2004-10-08 23:04:50.000000000 +0200
++++ tvision/include/compatlayer.h	2005-06-01 18:11:13.700514896 +0200
+@@ -324,7 +324,7 @@
+     library. GCC implemented it in version 3.0. BC++ implemented some
+     stuff in versions like BC++ 5.5. So that's a real mess. */
+  #if __GNUC__>=3
+-  #if __GNUC_MINOR__>=4
++  #if __GNUC__ >=4 || __GNUC_MINOR__>=4
+    // gcc 3.4. It have __gnu_cxx::stdio_filebuf class.
+    #define CLY_filebuf       __gnu_cxx::stdio_filebuf<char>
+    #define CLY_int_filebuf   CLY_filebuf
