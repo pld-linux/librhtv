@@ -71,8 +71,8 @@ Biblioteki statyczne rhtvision.
 	%{?debug:--with-debug}
 
 %{__make} \
-	RHIDE_GCC=%{__cc} \
-	RHIDE_GXX=%{__cxx} \
+	RHIDE_GCC="%{__cc}" \
+	RHIDE_GXX="%{__cxx}" \
 	libdir=%{_libdir}
 
 %install
