@@ -2,7 +2,7 @@ Summary:	Unix port of Borland TurboVision library
 Summary(pl):	Uniksowa wersja biblioteki TurboVision Borlanda
 Name:		librhtv
 Version:	2.0.3
-Release:	1
+Release:	2
 License:	Borland, some modifications are BSD-like licensed (generally free)
 Group:		Libraries
 Source0:	http://dl.sourceforge.net/tvision/rhtvision-%{version}.src.tar.gz
@@ -121,6 +121,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files devel
 %defattr(644,root,root,755)
+%doc doc/*.txt doc/*.html
 %attr(755,root,root) %{_bindir}/rhtv-config
 %attr(755,root,root) %{_libdir}/lib*.so
 %{_includedir}/*
