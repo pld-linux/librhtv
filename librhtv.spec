@@ -104,7 +104,7 @@ cd examples
 %{__perl} patchenv.pl
 cd ..
 
-cp -ar examples/* $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
+cp -a examples/* $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
 
 %find_lang tvision%{version}
 
