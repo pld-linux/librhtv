@@ -1,5 +1,5 @@
 Summary:	Unix port of Borland TurboVision library
-Summary(pl):	Uniksowa wersja biblioteki TurboVision Borlanda
+Summary(pl.UTF-8):   Uniksowa wersja biblioteki TurboVision Borlanda
 Name:		librhtv
 Version:	2.0.3
 Release:	2
@@ -29,33 +29,33 @@ programmers).
 
 This port is based on the Borland 2.0 version with fixes.
 
-%description -l pl
+%description -l pl.UTF-8
 Uniksowa wersja biblioteki TurboVision 2.0 Borlanda. TurboVision jest
-obiektow± bibliotek± do okienkowych interfejsÛw uøytkownika w trybie
+obiektowƒÖ bibliotekƒÖ do okienkowych interfejs√≥w u≈ºytkownika w trybie
 tekstowym.
 
 %package devel
 Summary:	%{name} header files
-Summary(pl):	Pliki nag≥Ûwkowe %{name}
+Summary(pl.UTF-8):   Pliki nag≈Ç√≥wkowe %{name}
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 
 %description devel
 rhtvision header files.
 
-%description devel -l pl
-Pliki nag≥Ûwkowe rhtvision.
+%description devel -l pl.UTF-8
+Pliki nag≈Ç√≥wkowe rhtvision.
 
 %package static
 Summary:	Static %{name} libraries
-Summary(pl):	Biblioteki statyczne %{name}
+Summary(pl.UTF-8):   Biblioteki statyczne %{name}
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 
 %description static
 Static rhtvision libraries.
 
-%description static -l pl
+%description static -l pl.UTF-8
 Biblioteki statyczne rhtvision.
 
 %prep
