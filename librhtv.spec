@@ -1,5 +1,5 @@
 Summary:	Unix port of Borland TurboVision library
-Summary(pl.UTF-8):   Uniksowa wersja biblioteki TurboVision Borlanda
+Summary(pl.UTF-8):	Uniksowa wersja biblioteki TurboVision Borlanda
 Name:		librhtv
 Version:	2.0.3
 Release:	2
@@ -36,7 +36,7 @@ tekstowym.
 
 %package devel
 Summary:	%{name} header files
-Summary(pl.UTF-8):   Pliki nagłówkowe %{name}
+Summary(pl.UTF-8):	Pliki nagłówkowe %{name}
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 
@@ -48,7 +48,7 @@ Pliki nagłówkowe rhtvision.
 
 %package static
 Summary:	Static %{name} libraries
-Summary(pl.UTF-8):   Biblioteki statyczne %{name}
+Summary(pl.UTF-8):	Biblioteki statyczne %{name}
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 
