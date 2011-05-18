@@ -1,16 +1,17 @@
 Summary:	Unix port of Borland TurboVision library
 Summary(pl.UTF-8):	Uniksowa wersja biblioteki TurboVision Borlanda
 Name:		librhtv
-Version:	2.0.3
-Release:	2
+Version:	2.2.1
+Release:	0.1
 License:	Borland, some modifications are BSD-like licensed (generally free)
 Group:		Libraries
-Source0:	http://dl.sourceforge.net/tvision/rhtvision-%{version}.src.tar.gz
-# Source0-md5:	b6129f5c510ba9d28d21c9575b7e1c75
+Source0:	http://download.sourceforge.net/tvision/rhtvision_%{version}-1.tar.gz
+# Source0-md5:	46b815d86bbbb2f9b112b11f63e2f5a6
 Patch0:		%{name}-nolowlevelgarbage.patch
-Patch1:		%{name}-gcc4.patch
+Patch1:		%{name}-fcntl.patch
+Patch2:		%{name}-ncurses.patch
 URL:		http://tvision.sourceforge.net/
-BuildRequires:	XFree86-devel
+BuildRequires:	xorg-lib-libX11-devel
 BuildRequires:	gpm-devel
 BuildRequires:	libstdc++-devel
 BuildRequires:	ncurses-devel
@@ -62,12 +63,14 @@ Biblioteki statyczne rhtvision.
 %setup -q -n tvision
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 %build
 %{__perl} config.pl \
 	--prefix=%{_prefix} \
-	--cflags="%{rpmcflags} -I/usr/include/ncurses" \
-	--cxxflags="%{rpmcflags} -fno-exceptions -I/usr/include/ncurses" \
+	--cflags="%{rpmcflags} -I/usr/include/ncursesw" \
+	--cxxflags="%{rpmcflags} -fno-exceptions -I/usr/include/ncursesw" \
+	--X11lib="tinfow X11 Xmu" \
 	%{?debug:--with-debug}
 
 %{__make} \
