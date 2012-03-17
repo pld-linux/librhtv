@@ -1,0 +1,29 @@
+--- tvision/classes/x11/x11src.cc.old	2011-05-18 11:59:30.000000000 +0200
++++ tvision/classes/x11/x11src.cc	2011-05-18 12:03:37.000000000 +0200
+@@ -2881,7 +2881,7 @@ TScreen::appHelperHandler TScreenX11::Op
+     h=(helperHandler *)appHelperHandlers->at(hNum);
+ 
+  // Open the remote server
+- int nullH=open("/dev/null",O_WRONLY|O_BINARY|O_CREAT|O_TRUNC,S_IREAD|S_IWRITE);
++ int nullH=open("/dev/null",O_WRONLY|O_BINARY|O_CREAT|O_TRUNC,S_IRUSR|S_IWUSR);
+  if (nullH==-1)
+    {
+     appHelperError=5;
+@@ -2924,7 +2924,7 @@ Boolean TScreenX11::CloseHelperApp(appHe
+    }
+ 
+  char buf[80];
+- int nullH=open("/dev/null",O_WRONLY|O_BINARY|O_CREAT|O_TRUNC,S_IREAD|S_IWRITE);
++ int nullH=open("/dev/null",O_WRONLY|O_BINARY|O_CREAT|O_TRUNC,S_IRUSR|S_IWUSR);
+  if (nullH==-1)
+    {
+     appHelperError=5;
+@@ -2968,7 +2968,7 @@ Boolean TScreenX11::SendFileToHelper(app
+  int len=160+strlen(file);
+  int page;
+  AllocLocalStr(buf,len);
+- int nullH=open("/dev/null",O_WRONLY|O_BINARY|O_CREAT|O_TRUNC,S_IREAD|S_IWRITE);
++ int nullH=open("/dev/null",O_WRONLY|O_BINARY|O_CREAT|O_TRUNC,S_IRUSR|S_IWUSR);
+  if (nullH==-1)
+    {
+     appHelperError=5;
