@@ -1,0 +1,11 @@
+--- tvision/classes/tlookupv.cc.orig	2014-01-07 17:22:42.816679628 +0100
++++ tvision/classes/tlookupv.cc	2014-01-07 17:32:22.022303566 +0100
+@@ -57,7 +57,7 @@ const char * TStringLookupValidator::err
+ 
+ void TStringLookupValidator::error()
+ {
+-  messageBox(mfError | mfOKButton, errorMsg);
++  messageBox(errorMsg, mfError | mfOKButton );
+ }
+ 
+ static Boolean stringMatch(void* a1, void* a2)
