@@ -2,7 +2,7 @@ Summary:	Unix port of Borland TurboVision library
 Summary(pl.UTF-8):	Uniksowa wersja biblioteki TurboVision Borlanda
 Name:		librhtv
 Version:	2.2.1
-Release:	0.1
+Release:	1
 License:	Borland, some modifications are BSD-like licensed (generally free)
 Group:		Libraries
 Source0:	http://download.sourceforge.net/tvision/rhtvision_%{version}-1.tar.gz
@@ -10,6 +10,7 @@ Source0:	http://download.sourceforge.net/tvision/rhtvision_%{version}-1.tar.gz
 Patch0:		%{name}-nolowlevelgarbage.patch
 Patch1:		%{name}-fcntl.patch
 Patch2:		%{name}-ncurses.patch
+Patch3:		format-security.patch
 URL:		http://tvision.sourceforge.net/
 BuildRequires:	xorg-lib-libX11-devel
 BuildRequires:	gpm-devel
@@ -64,18 +65,20 @@ Biblioteki statyczne rhtvision.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 %build
 %{__perl} config.pl \
 	--prefix=%{_prefix} \
 	--cflags="%{rpmcflags} -I/usr/include/ncursesw" \
 	--cxxflags="%{rpmcflags} -fno-exceptions -I/usr/include/ncursesw" \
-	--X11lib="tinfow X11 Xmu" \
+	--X11lib="X11 Xmu" \
 	%{?debug:--with-debug}
 
 %{__make} \
 	RHIDE_GCC="%{__cc}" \
 	RHIDE_GXX="%{__cxx}" \
+	RHIDE_LDFLAGS="%{rpmldflags} -shared -Wl,-soname,librhtv.so.2" \
 	libdir=%{_libdir}
 
 %install
@@ -85,6 +88,10 @@ install -d $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
 %{__make} install \
 	prefix=$RPM_BUILD_ROOT%{_prefix} \
 	libdir=$RPM_BUILD_ROOT%{_libdir}
+
+cd $RPM_BUILD_ROOT%{_libdir}
+ln -sf librhtv.so.2.2.1 librhtv.so.2
+cd -
 
 # let's create new rhide.env
 cat > examples/rhide.env  <<EOF
@@ -121,6 +128,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc readme.txt TODO borland.txt
 %attr(755,root,root) %{_libdir}/lib*.so.*.*
+%attr(755,root,root) %ghost %{_libdir}/lib*.so.2
 
 %files devel
 %defattr(644,root,root,755)
