@@ -90,7 +90,7 @@ install -d $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
 	libdir=$RPM_BUILD_ROOT%{_libdir}
 
 cd $RPM_BUILD_ROOT%{_libdir}
-ln -sf librhtv.so.2.2.1 librhtv.so.2
+ln -sf librhtv.so.%{version} librhtv.so.2
 cd -
 
 # let's create new rhide.env
@@ -127,17 +127,18 @@ rm -rf $RPM_BUILD_ROOT
 %files -f tvision%{version}.lang
 %defattr(644,root,root,755)
 %doc readme.txt TODO borland.txt
-%attr(755,root,root) %{_libdir}/lib*.so.*.*
-%attr(755,root,root) %ghost %{_libdir}/lib*.so.2
+%attr(755,root,root) %{_libdir}/librhtv.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/librhtv.so.2
 
 %files devel
 %defattr(644,root,root,755)
 %doc doc/*.txt doc/*.html
 %attr(755,root,root) %{_bindir}/rhtv-config
-%attr(755,root,root) %{_libdir}/lib*.so
-%{_includedir}/*
+%attr(755,root,root) %{_libdir}/librhtv.so
+%{_libdir}/libtvfintl.a
+%{_includedir}/rhtvision
 %{_examplesdir}/%{name}-%{version}
 
 %files static
 %defattr(644,root,root,755)
-%{_libdir}/lib*.a
+%{_libdir}/librhtv.a
