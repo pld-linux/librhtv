@@ -1,0 +1,17 @@
+--- tvision/classes/codepage.cc.orig	2014-02-17 14:23:43.029167096 +0100
++++ tvision/classes/codepage.cc	2014-02-17 14:28:17.483411445 +0100
+@@ -1905,9 +1905,14 @@ void TVCodePage::RemapBufferGeneric(int
+      while (!fromCode[val])
+        { // Find an equivalent for val
+         if (val<256)
++        {
++           if (val == Similar[val]) break;
+            val=Similar[val];
++        }
+         else
++        {
+            val=Similar2[val-256];
++        }
+        }
+      fromCode[toCode[i]]=fromCode[val];
+     }
