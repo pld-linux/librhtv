@@ -75,7 +75,8 @@ Biblioteki statyczne rhtvision.
 	--cflags="%{rpmcflags} -I/usr/include/ncursesw" \
 	--cxxflags="%{rpmcflags} -fno-exceptions -I/usr/include/ncursesw" \
 	--X11lib="X11 Xmu" \
-	%{?debug:--with-debug}
+	--with-debug \
+	%{?debug:--debug}
 
 %{__make} \
 	RHIDE_GCC="%{__cc}" \
